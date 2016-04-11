@@ -3,5 +3,6 @@
 - get tests to pass
 - do in order
 - customer.factory.spec
+- states.spec
 - customers.ctrl.spec
 - customer.ctrl.spec
