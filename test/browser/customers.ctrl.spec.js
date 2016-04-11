@@ -69,17 +69,49 @@ describe('CustomersCtrl', function(){
         return $q.when({ id: 5, name: 'Shep'});
       });
 
-      $state.go = function(){
-        stateArguments = arguments;
-      };
+      var stateSpy = spyOn($state, 'go');
+
+
       $scope.customer = { name: 'Shep'};
       var CustomersCtrl = $controller('CustomersCtrl', {$scope: $scope});
       $scope.insert({name: 'shep'});
       $scope.$digest();
       expect(spy).toHaveBeenCalledWith($scope.customer);
-      expect(stateArguments.length).toEqual(2);
-      expect(stateArguments[0]).toEqual('customer');
-      expect(stateArguments[1]).toEqual({ id: 5});
+      expect(stateSpy).toHaveBeenCalledWith('customer', {id: 5});
+
+    });
+  });
+
+  describe('deleting a customer', function(){
+    it('calls the insert factory method and goes to detail page', function(){
+      var $scope = $rootScope.$new();
+      var stateArguments;
+
+      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function(){
+        return $q.when([
+            {
+              name: 'Moe'
+            },
+            {},
+            {}
+        ]);
+      });
+
+      var spy = spyOn(CustomerFactory, '_delete').and.callFake(function(){
+        return $q.when('');
+      });
+
+      $state.go = function(){
+        stateArguments = arguments;
+      };
+
+      $scope.customer = { name: 'Shep'};
+      $controller('CustomersCtrl', {$scope: $scope});
+      $scope.$digest();
+      $scope._delete($scope.customers[0]);
+      $scope.$digest();
+      expect(spy).toHaveBeenCalledWith($scope.customers[0]);
+      expect(fetchSpy.calls.count()).toEqual(2);
     });
   });
 });
