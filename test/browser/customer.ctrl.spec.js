@@ -13,10 +13,10 @@ describe('CustomersCtrl', function(){
   describe('scope', function(){
     it('sets the scope', function(){
       var $scope = $rootScope.$new();
-      $controller('CustomerCtrl', {$scope: $scope, customer: { id: 3, name: 'Moe'}});
-      //$scope.delete();
+      var customer = { id: 3, name: 'Moe'};
+      $controller('CustomerCtrl', {$scope: $scope, customer: customer });
       $scope.$digest();
-      expect($scope.customer.name).toEqual('Moe');
+      expect($scope.customer).toEqual(customer);
     });
   });
 
@@ -24,17 +24,16 @@ describe('CustomersCtrl', function(){
     it('goes to listing page', function(){
       var $scope = $rootScope.$new();
       var state;
-      $controller('CustomerCtrl', {$scope: $scope, customer: { id: 3, name: 'Moe'}});
-      spyOn(CustomerFactory, '_delete').and.callFake(function(){
+      var customer = { id: 3, name: 'Moe'};
+      $controller('CustomerCtrl', {$scope: $scope, customer: customer });
+      var factorySpy = spyOn(CustomerFactory, '_delete').and.callFake(function(){
         return $q.when({});
       });
-      spyOn($state, 'go').and.callFake(function(_state){
-        state = _state; 
-      });
-      $scope.delete();
+      var stateSpy = spyOn($state, 'go');
+      $scope._delete();
       $scope.$digest();
-      expect($scope.customer.name).toEqual('Moe');
-      expect(state).toEqual('customers');
+      expect(factorySpy).toHaveBeenCalledWith($scope.customer);
+      expect(stateSpy).toHaveBeenCalledWith('customers');
     });
   });
 });

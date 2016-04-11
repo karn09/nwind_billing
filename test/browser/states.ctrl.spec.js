@@ -18,6 +18,7 @@ describe('states', function(){
       var state = $state.get('customer');
       var url = $state.href(state, { id: 3});
       expect(url).toEqual('#/customers/3');
+      expect(typeof state.resolve.customer === 'function').toEqual(true);
     });
   });
 });
