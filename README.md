@@ -1,0 +1,7 @@
+- npm install
+- npm test
+- get tests to pass
+- do in order
+- customer.factory.spec
+- customers.ctrl.spec
+- customer.ctrl.spec
