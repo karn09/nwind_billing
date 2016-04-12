@@ -1,8 +1,8 @@
-describe('CustomersCtrl', function(){
+describe('CustomersCtrl', function() {
   var $controller, $rootScope, CustomerFactory, $q, $httpBackend, $state;
 
   beforeEach(module('app'));
-  beforeEach(inject(function(_$controller_, _$rootScope_, _CustomerFactory_, _$q_, _$httpBackend_, _$state_){
+  beforeEach(inject(function(_$controller_, _$rootScope_, _CustomerFactory_, _$q_, _$httpBackend_, _$state_) {
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     CustomerFactory = _CustomerFactory_;
@@ -11,16 +11,16 @@ describe('CustomersCtrl', function(){
     $state = _$state_;
   }));
 
-  afterEach(function(){
+  afterEach(function() {
     $httpBackend.verifyNoOutstandingRequest();
     $httpBackend.verifyNoOutstandingExpectation();
-  
+
   });
 
-  describe('no customers', function(){
-    it('sets the scope', function(){
+  describe('no customers', function() {
+    it('sets the scope', function() {
       var $scope = $rootScope.$new();
-      spyOn(CustomerFactory, 'fetchAll').and.callFake(function(){
+      spyOn(CustomerFactory, 'fetchAll').and.callFake(function() {
         return $q.when([]);
       });
       $controller('CustomersCtrl', {$scope: $scope});
@@ -30,14 +30,14 @@ describe('CustomersCtrl', function(){
     });
   });
 
-  describe('there are customers', function(){
-    it('sets the scope', function(){
+  describe('there are customers', function() {
+    it('sets the scope', function() {
       var $scope = $rootScope.$new();
-      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function(){
+      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function() {
         return $q.when([
-            { name: 'Moe' },
-            { name: 'Larry' },
-            { name: 'Curly' },
+            {name: 'Moe'},
+            {name: 'Larry'},
+            {name: 'Curly'},
         ]);
       });
       $controller('CustomersCtrl', {$scope: $scope});
@@ -49,22 +49,21 @@ describe('CustomersCtrl', function(){
     });
   });
 
-  describe('inserting a customer', function(){
-    it('calls the insert factory method and goes to detail page', function(){
+  describe('inserting a customer', function() {
+    it('calls the insert factory method and goes to detail page', function() {
       var $scope = $rootScope.$new();
 
-      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function(){
+      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function() {
         return $q.when([]);
       });
 
-      var createSpy = spyOn(CustomerFactory, 'create').and.callFake(function(){
-        return $q.when({ id: 5, name: 'Shep'});
+      var createSpy = spyOn(CustomerFactory, 'create').and.callFake(function() {
+        return $q.when({id: 5, name: 'Shep'});
       });
 
       var stateSpy = spyOn($state, 'go');
 
-
-      $scope.newCustomer = { name: 'Shep'};
+      $scope.newCustomer = {name: 'Shep'};
       $controller('CustomersCtrl', {$scope: $scope});
       $scope.insert();
       $scope.$digest();
@@ -74,20 +73,19 @@ describe('CustomersCtrl', function(){
     });
   });
 
-  describe('deleting a customer', function(){
-    it('calls the delete factory method and reloads data', function(){
+  describe('deleting a customer', function() {
+    it('calls the delete factory method and reloads data', function() {
       var $scope = $rootScope.$new();
 
-      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function(){
+      var fetchSpy = spyOn(CustomerFactory, 'fetchAll').and.callFake(function() {
         return $q.when([
-            { name: 'Moe' }
+            {name: 'Moe'}
         ]);
       });
 
-      var deleteSpy = spyOn(CustomerFactory, '_delete').and.callFake(function(){
+      var deleteSpy = spyOn(CustomerFactory, '_delete').and.callFake(function() {
         return $q.when('');
       });
-
 
       $controller('CustomersCtrl', {$scope: $scope});
       $scope.$digest();
